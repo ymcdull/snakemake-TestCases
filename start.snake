@@ -1,0 +1,7 @@
+rule start:
+  input:
+    "start.txt"
+  output:
+    "output.txt"
+  shell:
+    "cp {input} {output}"

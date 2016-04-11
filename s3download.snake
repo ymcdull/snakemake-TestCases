@@ -1,0 +1,12 @@
+from snakemake.remote.S3 import RemoteProvider as S3RemoteProvider
+S3 = S3RemoteProvider(access_key_id="####################################", secret_access_key="#############################################")
+
+
+rule start:
+    input:
+        S3.remote("frank.test/download.txt")
+    output:
+        # Must be the same as "input"
+        "frank.test/download.txt"
+    shell:
+        "cp {output[0]} ./"

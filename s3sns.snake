@@ -1,0 +1,19 @@
+from snakemake.remote.S3 import RemoteProvider as S3RemoteProvider
+S3 = S3RemoteProvider(access_key_id="####################################", secret_access_key="#############################################")
+
+rule start:
+    input:
+        S3.remote("frank.test/download.txt")
+    # I put an error here, which can be caught by "onerror"
+    output:
+        "frank.wtcmp/error"
+    shell:
+        "cp {output[0]} ./"
+
+onsuccess:
+    print("workflow finished, no errors")
+
+onerror:
+    print("An error occurred")
+    # Replace all the `'` to `"` to set up the shell command string, and put the content of {log} file as the email body sent by aws sns
+    shell('str=`sed "s/\'/\\"/g" {log}`; aws sns publish --topic-arn arn:aws:sns:eu-west-1:000595413897:cfncluster-franktest-SNS-1R3XETO4WEV5X --subject "this is a test message sent from Frank" --message "$str"')

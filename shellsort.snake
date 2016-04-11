@@ -1,0 +1,13 @@
+DATASETS = ['D1', 'D2', 'D3']
+
+rule all:
+  input:
+    expand("{data}_sorted.txt", data=DATASETS)
+
+rule sort:
+  input:
+    "D{data}_input.txt"
+  output:
+    "D{data}_sorted.txt"
+  shell:
+    "sort {input} > {output}"

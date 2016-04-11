@@ -1,0 +1,16 @@
+DATASETS = ['D1', 'D2', 'D3']
+
+# apply rule all, a target rule that just collect results
+rule all: # or rule targets here
+  input:
+    expand("{dataset}_sorted.txt", dataset = DATASETS)
+
+rule sort:
+  input:
+    a="{dataset}_input.txt"
+  output:
+    b="{dataset}_sorted.txt"
+  run:
+    with open(output.b, "w") as out:
+      for l in sorted(open(input.a)):
+        print(l, file=out)
